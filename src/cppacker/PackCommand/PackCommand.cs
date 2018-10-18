@@ -12,7 +12,7 @@ namespace cppacker.Pack
 {
 	public class PackCommand : CommandLine.ICommand
 	{
-		public static CommandLine.OptionsValidation Validate(CommandLine.ICommandOptions options)
+		public CommandLine.OptionsValidation ValidateOptions(CommandLine.ICommandOptions options)
 		{
 			PackOptions PackOptions = (PackOptions)options;
 			var validation = new CommandLine.OptionsValidation();
@@ -29,6 +29,11 @@ namespace cppacker.Pack
 		{
 			this.PackOptions = options;
 		}
+
+		public PackCommand()
+		{
+		}
+
 		private PackOptions PackOptions;
 		private Project Project;
 

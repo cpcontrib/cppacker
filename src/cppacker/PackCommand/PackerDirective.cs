@@ -11,7 +11,7 @@ namespace cppacker.Pack
 		public PackerDirective(string name, string options)
 		{
 			this.Name = name;
-			this.Options = options == null ? "" : options;
+			this.Options = options ?? "";
 		}
 
 		public string Name;

@@ -9,7 +9,7 @@ namespace CommandLine
 	public interface ICommand
 	{
 		int Execute();
-		OptionsValidation ValidateOptions(ICommandOptions);
+		OptionsValidation ValidateOptions(ICommandOptions options);
 	}
 	public interface ICommandOptions
 	{
@@ -19,7 +19,7 @@ namespace CommandLine
 		List<string> messages = new List<string>();
 
 		public bool IsValid { get { return this._IsValid; } }
-		private bool _IsValid;
+		private bool _IsValid = true;
 
 		public IEnumerable<string> GetMessages()
 		{
