@@ -4,8 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cppacker
+namespace CommandLine
 {
+	public interface ICommand
+	{
+		int Execute();
+		OptionsValidation ValidateOptions(ICommandOptions);
+	}
+	public interface ICommandOptions
+	{
+	}
 	public class OptionsValidation
 	{
 		List<string> messages = new List<string>();

@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OptionsValidation.cs" />
+    <Compile Include="CommandLine.types.cs" />
     <Compile Include="PackCommand\PackCommand.cs" />
     <Compile Include="PackCommand\PackDocument.cs" />
     <Compile Include="PackerDirective.cs" />
