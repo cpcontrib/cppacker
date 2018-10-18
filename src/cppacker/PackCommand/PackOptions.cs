@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cppacker
+namespace cppacker.PackCommand
 {
-	public class ProgramOptions
+	public class PackOptions
 	{
-		
+		public string ProjectFile { get; set; }
 	}
 }
