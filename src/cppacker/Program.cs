@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.CodeAnalysis.CSharp;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,6 +22,9 @@ namespace cppacker
 			}
 			else
 			{
+				ProjectLoader projectLoader = new ProjectLoader(ProgramOptions.ProjectFile);
+
+				var syntaxtrees = projectLoader.BuildSyntaxTrees();
 			}
 		}
 
