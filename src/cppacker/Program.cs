@@ -35,15 +35,63 @@ namespace cppacker
 				try
 				{
 					int exitcode = packer.Execute();
-					Environment.Exit(exitcode);
+					Exit(exitcode);
 				}
 				catch(Exception ex)
 				{
 					Console.WriteLine(ex);
-					Environment.Exit(1);
+					Exit(1);
 				}
 
+				
 			}
+		}
+		static void Exit(int exitcode, int waitSeconds = 10, bool quiet = false)
+		{
+			if(System.Diagnostics.Debugger.IsAttached)
+			{
+				if(quiet == false)
+				{
+					if(exitcode > 0) Console.WriteLine("Exit code: {0}", exitcode);
+					Console.WriteLine("Debugger attached: pausing for {0} seconds", waitSeconds);
+					Task.Factory.StartNew(() => WaitForKey(waitSeconds)).Wait(TimeSpan.FromSeconds(waitSeconds));
+				}
+				else
+				{
+					Task.Factory.StartNew(() => Console.ReadKey()).Wait(TimeSpan.FromSeconds(waitSeconds));
+				}
+			}
+		}
+		static void WaitForKey(int waitSeconds = 10, string message = null)
+		{
+			message = message ?? "Debugger attached: pausing for ";
+
+			var original = DateTime.Now;
+			var newTime = original;
+
+			var remainingWaitTime = waitSeconds;
+			var lastWaitTime = waitSeconds.ToString();
+			var keyRead = false;
+			Console.Write(message + waitSeconds);
+			do
+			{
+				keyRead = Console.KeyAvailable;
+				if(!keyRead)
+				{
+					newTime = DateTime.Now;
+					remainingWaitTime = waitSeconds - (int)(newTime - original).TotalSeconds;
+					var newWaitTime = remainingWaitTime.ToString();
+					if(newWaitTime != lastWaitTime)
+					{
+						var backSpaces = new string('\b', lastWaitTime.Length);
+						var spaces = new string(' ', lastWaitTime.Length);
+						Console.Write(backSpaces + spaces + backSpaces);
+						lastWaitTime = newWaitTime;
+						Console.Write(lastWaitTime);
+						System.Threading.Thread.Sleep(100);
+					}
+				}
+			} while(remainingWaitTime > 0 && !keyRead);
 		}
 
 
