@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 
-namespace cppacker.PackCommand
+namespace cppacker.Pack
 {
 	public struct PackDocument
 	{

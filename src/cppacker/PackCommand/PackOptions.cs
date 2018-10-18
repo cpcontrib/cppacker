@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cppacker.PackCommand
+namespace cppacker.Pack
 {
 	public class PackOptions
 	{

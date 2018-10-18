@@ -7,7 +7,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-using cppacker.PackCommand;
+using PackOptions = cppacker.Pack.PackOptions;
+using PackCommand = cppacker.Pack.PackCommand;
 
 namespace cppacker
 {

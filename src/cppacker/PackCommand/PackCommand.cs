@@ -8,9 +8,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace cppacker.PackCommand
+namespace cppacker.Pack
 {
-	public class PackCommand
+	public class PackCommand : CommandLine.ICommand
 	{
 		public static OptionsValidation Validate(PackOptions PackOptions)
 		{
