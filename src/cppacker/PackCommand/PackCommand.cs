@@ -43,6 +43,9 @@ namespace cppacker.Pack
 
 			var documents = GetDocumentsForBuild(project);
 
+			PackOptions.ProjectName = PackOptions.ProjectName ?? "Unnamed";
+			PackOptions.Version = PackOptions.Version ?? "0.0.0";
+			
 			BuildOutput(documents);
 
 			return 0;
@@ -102,7 +105,14 @@ namespace cppacker.Pack
 
 		public void BuildOutput(IEnumerable<PackDocument> documents)
 		{
+			string baseName = $"_{PackOptions.ProjectName};{PackOptions.Version};";
 
+			if(PackOptions.Quiet == false) { Console.WriteLine("Build output"); }
+
+			foreach(var packdocument in documents)
+			{
+				
+			}
 		}
 
 		private void writeverbose(Func<string> messageFunc)
