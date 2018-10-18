@@ -68,8 +68,13 @@ namespace cppacker.Pack
 
 				var packerDirectives = GetPackerDirectives(document);
 
-				if(packerDirectives.Any(_ => _.Name == "ignore") == true)
+				if(packerDirectives.Count() > 0 && packerDirectives.Any(_ => _.Name == "ignore") == true)
 				{
+					writeverbose(() => $"skip {document.Name}"); 
+				}
+				else
+				{
+					writeverbose(() => $" ok  {document.Name}");
 					documentsForBuild.Add(new PackDocument { Document = document, PackerDirectives = packerDirectives });
 				}
 			}
@@ -98,6 +103,11 @@ namespace cppacker.Pack
 		public void BuildOutput(IEnumerable<PackDocument> documents)
 		{
 
+		}
+
+		private void writeverbose(Func<string> messageFunc)
+		{
+			if(PackOptions.Verbose) Console.WriteLine(messageFunc());
 		}
 
 	}

@@ -18,7 +18,8 @@ namespace cppacker
 		static void Main(string[] args)
 		{
 			var PackOptions = new PackOptions() {
-				ProjectFile = args[1]
+				ProjectFile = args[1],
+				Verbose = true
 			};
 
 			var validation = new PackCommand().ValidateOptions(PackOptions); 
