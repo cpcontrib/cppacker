@@ -49,7 +49,7 @@
     <Compile Include="CommandLine.types.cs" />
     <Compile Include="PackCommand\PackCommand.cs" />
     <Compile Include="PackCommand\PackDocument.cs" />
-    <Compile Include="PackerDirective.cs" />
+    <Compile Include="PackCommand\PackerDirective.cs" />
     <Compile Include="PackCommand\PackOptions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProgramOptions.cs" />
