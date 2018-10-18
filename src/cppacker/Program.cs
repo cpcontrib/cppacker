@@ -18,7 +18,7 @@ namespace cppacker
 		static void Main(string[] args)
 		{
 			var PackOptions = new PackOptions() {
-				ProjectFile = @"C:\Projects\cpcontrib\core\src\cpcontrib.core\cpcontrib.core.csproj"
+				ProjectFile = args[1]
 			};
 
 			var validation = new PackCommand().ValidateOptions(PackOptions); 
