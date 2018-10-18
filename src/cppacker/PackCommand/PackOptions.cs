@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace cppacker.Pack
 {
-	public class PackOptions : CommandLine.ICommandOptions
+	public class PackOptions : ProgramOptions
 	{
 		public string ProjectFile { get; set; }
 	}
