@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 using PackOptions = cppacker.Pack.PackOptions;
 using PackCommand = cppacker.Pack.PackCommand;
+using CommandLine;
 
 namespace cppacker
 {
@@ -20,7 +21,7 @@ namespace cppacker
 				ProjectFile = @"C:\Projects\cpcontrib\core\src\cpcontrib.core\cpcontrib.core.csproj"
 			};
 
-			var validation = PackCommand.Validate(PackOptions); 
+			var validation = new PackCommand().ValidateOptions(PackOptions); 
 			if(validation.IsValid == false)
 			{
 				Console.WriteLine("some options not valid:");
@@ -33,7 +34,8 @@ namespace cppacker
 				PackCommand packer = new PackCommand(PackOptions);
 				try
 				{
-					return packer.Execute();
+					int exitcode = packer.Execute();
+					Environment.Exit(exitcode);
 				}
 				catch(Exception ex)
 				{

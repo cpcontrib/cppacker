@@ -12,9 +12,10 @@ namespace cppacker.Pack
 {
 	public class PackCommand : CommandLine.ICommand
 	{
-		public static OptionsValidation Validate(PackOptions PackOptions)
+		public static CommandLine.OptionsValidation Validate(CommandLine.ICommandOptions options)
 		{
-			var validation = new OptionsValidation();
+			PackOptions PackOptions = (PackOptions)options;
+			var validation = new CommandLine.OptionsValidation();
 
 			if(File.Exists(PackOptions.ProjectFile) == false)
 			{
