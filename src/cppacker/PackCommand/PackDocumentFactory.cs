@@ -25,7 +25,7 @@ namespace cppacker.Pack
 					resolve(new PackDocument() {
 						Document = Document,
 						SyntaxTree = (SyntaxTree)results.ElementAt(0),
-						PackerDirectives = (IEnumerable<PackerDirective>)results.ElementAt(1)
+						PackerDirectives = (IEnumerable<PackerDirectiveVisit>)results.ElementAt(1)
 					});
 				});
 

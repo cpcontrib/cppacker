@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace cppacker.Pack
+namespace cppacker
 {
 	public struct PackerDirective
 	{
@@ -16,5 +16,13 @@ namespace cppacker.Pack
 
 		public string Name;
 		public string Options;
+	}
+	public class PackerDirectiveVisit
+	{
+		public PackerDirective PackerDirective;
+		public int LineNumber;
+		public string Name { get => PackerDirective.Name; }
+		public string Options { get => PackerDirective.Options; }
+
 	}
 }

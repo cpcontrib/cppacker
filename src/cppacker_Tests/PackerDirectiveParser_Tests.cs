@@ -1,11 +1,12 @@
-﻿using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using NUnit.Framework;
 using cppacker.Parsing;
+using cppacker;
 
 namespace cppacker_Tests
 {
@@ -15,42 +16,45 @@ namespace cppacker_Tests
 		[Test]
 		[TestCase("//!packer:targetFile=filenamespec.cs", "targetFile", "filenamespec.cs")]
 		[TestCase("//!packer:region=ASDF ASDF", "region", "ASDF ASDF")]
-		[TestCase("//!packer:endregion", "endregion", null)]
+		[TestCase("//!packer:endregion", "endregion", "")]
 		public void TestMethod(string rawtext, string directiveName, string directiveOptions)
 		{
-			var parser = CreatePackerParser();
+			var parser = CreatePackerDirectivesParser();
 
 			var parsed = parser.ParseLines(new string[] { rawtext })
 				.ToArray();
 
-			Assert.That(parsed[0], Is.TypeOf<ParserDirective>());
+			Assert.That(parsed[0], Is.TypeOf<PackerDirectiveVisit>());
 
-
+			var directive = parsed[0].PackerDirective;
 
 			Assert.That(directive.Name, Is.EqualTo(directiveName));
 			Assert.That(directive.Options, Is.EqualTo(directiveOptions));
 		}
 
 		[Test]
-		[TestCase("//!packer:targetFile=filenamespec.cs;sortOrder=999;asdf=ttt", "targetFile,sortOrder,asdf")]
+		[TestCase("//!packer:targetFile=XXTARGETFILEXX;sortOrder=XXSORTORDERXX;asdf=XXASDFXX", "targetFile,sortOrder,asdf")]
 		public void DelimitedOptions(string rawtext, string directiveNamesString)
 		{
-			var parser = CreatePackerParser();
+			string[] expectedNames = directiveNamesString.Split(',');
+			string[] expectedOptions = expectedNames.Select(item => "XX" + item.ToUpper() + "XX").ToArray();
+
+			var parser = CreatePackerDirectivesParser();
 
 			var parsed = parser.ParseLines(new string[] { rawtext })
 				.ToArray();
 
-			Assert.That(parsed[0].Type, Is.TypeOf<ParserDirectives>());
-
-			var directives = parsed
-
-			Assert.That(directive.Name, Is.EqualTo(directiveName));
-			Assert.That(directive.Options, Is.EqualTo(directiveOptions));
+			for(int index = 0; index < expectedNames.Length; index++)
+			{
+				Assert.That(parsed[index].PackerDirective.Name, Is.EqualTo(expectedNames[index]));
+				Assert.That(parsed[index].PackerDirective.Options, Is.EqualTo(expectedOptions[index]));
+			}
+	
 		}
 
-		private PackerDirectiveParser CreatePackerDirectiveParser()
+		private PackerDirectivesParser CreatePackerDirectivesParser()
 		{
-			return new PackerDirectiveParser();
+			return new PackerDirectivesParser();
 		}
 
 	}

@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using cppacker.Parsing;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
 using System;
 using System.Collections.Generic;
@@ -67,17 +68,19 @@ namespace cppacker.Pack
 			var documents = project.Documents.Where(_ => _.SupportsSyntaxTree == true).ToList();
 			foreach(var document in documents)
 			{
-				var text = File.ReadAllText(document.FilePath);
+
+				var factory = new PackDocumentFactory();
 
 				var packerDirectives = GetPackerDirectives(document);
 
-				if(packerDirectives.Count() > 0 && packerDirectives.Any(_ => _.Name == "ignore") == true)
+				if(packerDirectives.Count() > 0 && packerDirectives.Any(_ => _.Name == "exclude") == true)
 				{
 					writeverbose(() => $"skip {document.Name}"); 
 				}
 				else
 				{
 					writeverbose(() => $" ok  {document.Name}");
+					
 					documentsForBuild.Add(new PackDocument { Document = document, PackerDirectives = packerDirectives });
 				}
 			}
@@ -85,22 +88,11 @@ namespace cppacker.Pack
 			return documentsForBuild;
 		}
 
-		public IEnumerable<PackerDirective> GetPackerDirectives(Document document)
+		public IEnumerable<PackerDirectiveVisit> GetPackerDirectives(Document document)
 		{
-			Regex packerDirectivesRegex = new Regex(@"//!packer:([A-Za-z\-]*)(.*)");
-
-			string text = File.ReadAllText(document.FilePath);
-
-			List<PackerDirective> packerDirectives = new List<PackerDirective>();
-			foreach(Match match in packerDirectivesRegex.Matches(text))
-			{
-				if(match.Success)
-				{
-					packerDirectives.Add(new PackerDirective { Name = match.Groups[1].Value, Options = match.Groups[2].Value });
-				}
-			}
-
-			return packerDirectives;
+			System.Diagnostics.Debugger.Break();
+			PackerDirectivesParser p = new PackerDirectivesParser();
+			return p.ParseLines(new string[] { "" }); 
 		}
 
 		public void BuildOutput(IEnumerable<PackDocument> documents)

@@ -10,6 +10,7 @@ namespace cppacker.Pack
 	public struct PackDocument
 	{
 		internal Document Document;
-		internal IEnumerable<PackerDirective> PackerDirectives;
+		internal IEnumerable<PackerDirectiveVisit> PackerDirectives;
+		internal SyntaxTree SyntaxTree;
 	}
 }
