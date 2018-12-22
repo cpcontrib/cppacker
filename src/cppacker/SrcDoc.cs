@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 
-namespace cppacker.Pack
+namespace cppacker
 {
-	public struct PackDocument
+	public class SrcDoc
 	{
 		internal Document Document;
-		internal IEnumerable<PackerDirectiveVisit> PackerDirectives;
+		internal IEnumerable<PackerDirectiveNode> PackerDirectives;
 		internal SyntaxTree SyntaxTree;
 	}
 }

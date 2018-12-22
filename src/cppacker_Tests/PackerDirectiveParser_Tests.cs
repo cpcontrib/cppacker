@@ -24,9 +24,9 @@ namespace cppacker_Tests
 			var parsed = parser.ParseLines(new string[] { rawtext })
 				.ToArray();
 
-			Assert.That(parsed[0], Is.TypeOf<PackerDirectiveVisit>());
+			Assert.That(parsed[0], Is.TypeOf<PackerDirectiveNode>());
 
-			var directive = parsed[0].PackerDirective;
+			var directive = parsed[0];
 
 			Assert.That(directive.Name, Is.EqualTo(directiveName));
 			Assert.That(directive.Options, Is.EqualTo(directiveOptions));
@@ -46,8 +46,8 @@ namespace cppacker_Tests
 
 			for(int index = 0; index < expectedNames.Length; index++)
 			{
-				Assert.That(parsed[index].PackerDirective.Name, Is.EqualTo(expectedNames[index]));
-				Assert.That(parsed[index].PackerDirective.Options, Is.EqualTo(expectedOptions[index]));
+				Assert.That(parsed[index].Name, Is.EqualTo(expectedNames[index]));
+				Assert.That(parsed[index].Options, Is.EqualTo(expectedOptions[index]));
 			}
 	
 		}

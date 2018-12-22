@@ -1,4 +1,8 @@
-﻿using System;
+﻿
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,30 +16,15 @@ namespace cppacker.Parsing
 
 		Regex packerDirectivesRegex = new Regex(@"//!packer:(.*)");
 
-		public IEnumerable<PackerDirectiveVisit> ParseLines(IEnumerable<string> lines, int startingLineIndex = 0)
+		public IEnumerable<PackerDirectiveNode> ParseLines(IEnumerable<string> lines, int startingLineIndex = 0)
 		{
 			
-			List<PackerDirectiveVisit> directives = new List<PackerDirectiveVisit>();
+			List<PackerDirectiveNode> directives = new List<PackerDirectiveNode>();
 
 			int lineIndex = startingLineIndex;
 			foreach(var line in lines)
 			{
-				Match m;
-				if((m=packerDirectivesRegex.Match(line)).Success==true)
-				{
-					string[] groups = m.Groups[1].Value.Split(';');
-					foreach(var g in groups)
-					{
-						string[] split = g.Split('=');
-						var PackerDirective = new PackerDirective(split[0], (split.Length < 2 ? null : split[1]));
-						var node = new PackerDirectiveVisit() {
-							PackerDirective = PackerDirective,
-							LineNumber = lineIndex + 1
-						};
-
-						directives.Add(node);
-					}
-				}
+				_ParseLine(line, directives, lineIndex);
 
 				startingLineIndex++;
 			}
@@ -43,5 +32,42 @@ namespace cppacker.Parsing
 			return directives;
 		}
 
+
+		private void _ParseLine(string line, List<PackerDirectiveNode> directives, int lineIndex)
+		{
+			Match m;
+			if((m = packerDirectivesRegex.Match(line)).Success == true)
+			{
+				string[] groups = m.Groups[1].Value.Split(';');
+				foreach(var g in groups)
+				{
+					string[] split = g.Split('=');
+
+					var node = new PackerDirectiveNode() {
+						Name = split[0],
+						Options = (split.Length < 2 ? null : split[1].TrimEnd()),
+						LineNumber = lineIndex + 1
+					};
+
+					directives.Add(node);
+				}
+			}
+		}
+	}
+
+	public class FindUsingsWalker : CSharpSyntaxWalker
+	{
+
+		List<UsingStatementSyntax> fileUsingStatements = new List<UsingStatementSyntax>();
+
+		public override void VisitUsingStatement(UsingStatementSyntax node)
+		{
+			fileUsingStatements.Add(node);
+			base.VisitUsingStatement(node);
+		}
+		public override void VisitUsingDirective(UsingDirectiveSyntax node)
+		{
+			base.VisitUsingDirective(node);
+		}
 	}
 }
