@@ -46,6 +46,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Combined1.g4.lexer.cs">
+      <DependentUpon>Combined1.g4</DependentUpon>
+    </Compile>
+    <Compile Include="Combined1.g4.parser.cs">
+      <DependentUpon>Combined1.g4</DependentUpon>
+    </Compile>
+    <Antlr4 Include="Combined1.g4">
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>cppacker</CustomToolNamespace>
+    </Antlr4>
     <Compile Include="PackCommand\CommandLine.types.cs" />
     <Compile Include="PackCommand\PackCommand.cs" />
     <Compile Include="SrcDoc.cs" />
