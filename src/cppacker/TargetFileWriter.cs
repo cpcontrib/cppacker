@@ -21,16 +21,29 @@ namespace cppacker
 
 		public void Write(TargetFile targetfile)
 		{
-			string filepath = Path.Combine(_outputPath, _baseName + targetfile.Name);
-			
-
-			using(FileStream fs = new FileStream(filepath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite))
+			try
 			{
-				using(StreamWriter sw = new StreamWriter(fs))
+				string filepath = GetOutputFilePath(targetfile);
+
+				using(FileStream fs = new FileStream(filepath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite))
 				{
-					Write(targetfile, sw);
+					using(StreamWriter sw = new StreamWriter(fs))
+					{
+						Write(targetfile, sw);
+					}
 				}
 			}
+			catch(Exception ex)
+			{
+				throw new ApplicationException($"Failed to write target file '{targetfile.Name}'.", ex);
+			}
+		}
+
+		private string GetOutputFilePath(TargetFile targetfile)
+		{
+			string filepath = Path.Combine(_outputPath, _baseName + targetfile.Name);
+			Directory.CreateDirectory(_outputPath);
+			return filepath;
 		}
 
 		public void Write(TargetFile targetFile, TextWriter writer)

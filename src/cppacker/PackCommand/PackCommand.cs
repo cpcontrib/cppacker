@@ -173,10 +173,23 @@ namespace cppacker.Pack
 				this.PackOptions.OutputPath = ".\\";
 			}
 
+			if(PackOptions.Quiet == false)
+				Console.WriteLine($"Writing files to '{this.PackOptions.OutputPath}'.");
+
 			foreach(var targetfile in targetfilesList)
 			{
-				TargetFileWriter g = new TargetFileWriter(this.PackOptions.OutputPath, baseName);
-				g.Write(targetfile);
+				try
+				{
+					TargetFileWriter g = new TargetFileWriter(this.PackOptions.OutputPath, baseName);
+					g.Write(targetfile);
+
+					if(PackOptions.Quiet == false)
+						Console.WriteLine($"Wrote {targetfile.Name}");
+				}
+				catch(Exception ex)
+				{
+					Console.Error.WriteLine($"Failed to write {targetfile.Name}: " + ex.ToString());
+				}
 			}
 		}
 
