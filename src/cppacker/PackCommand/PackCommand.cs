@@ -161,10 +161,10 @@ namespace cppacker.Pack
 
 		public void GeneratePackedLibraryFiles(IEnumerable<TargetFile> targetfilesList)
 		{
-			PackOptions.ProjectName = PackOptions.ProjectName ?? "Unnamed";
-			PackOptions.Version = PackOptions.Version ?? "0.0.0";
+			string projectname = PackOptions_GetProjectName();
+			string version = PackOptions_GetVersion();
 
-			string baseName = $"_{PackOptions.ProjectName},{PackOptions.Version},";
+			string baseName = $"_{projectname},{version},";
 
 			if(PackOptions.Quiet == false) { Console.WriteLine("Build output"); }
 
@@ -178,6 +178,27 @@ namespace cppacker.Pack
 				TargetFileWriter g = new TargetFileWriter(this.PackOptions.OutputPath, baseName);
 				g.Write(targetfile);
 			}
+		}
+
+		internal string PackOptions_GetProjectName()
+		{
+			if(string.IsNullOrEmpty(this.PackOptions.ProjectName)==false)
+			{
+				return this.PackOptions.ProjectName;
+			}
+
+			return Path.GetFileNameWithoutExtension(this.PackOptions.ProjectFile);
+		}
+
+		internal string PackOptions_GetVersion()
+		{
+			if(string.IsNullOrEmpty(this.PackOptions.Version)==false)
+			{
+				return this.PackOptions.Version;
+			}
+
+			//throw new NotImplementedException("validation shouldve caught Version not set.");
+			return DateTime.UtcNow.ToString("yyyyMMddhhmm");
 		}
 
 		private void writeverbose(Func<string> messageFunc)
