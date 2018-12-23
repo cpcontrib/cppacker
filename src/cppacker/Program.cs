@@ -13,39 +13,43 @@ using CommandLine;
 
 namespace cppacker
 {
+	/// <summary>
+	/// Created because of ParseArguments bug that doesnt deal with a single verb
+	/// </summary>
+	[Verb("dummy", Hidden = true)] public class DummyOptions { } 
+
 	class Program
 	{
 		static void Main(string[] args)
 		{
-			var PackOptions = new PackOptions() {
-				ProjectFile = args[1],
-				Verbose = true
-			};
 
-			var validation = new PackCommand().ValidateOptions(PackOptions); 
-			if(validation.IsValid == false)
+			try
 			{
-				Console.WriteLine("some options not valid:");
-				foreach(var message in validation.GetMessages())
-					Console.WriteLine(message);
+				int exitcode = CommandLine.Parser.Default
+					.ParseArguments<PackOptions, DummyOptions>(args)
+					.MapResult(
+					(PackOptions opts) => {
+						var cmd = new PackCommand(opts);
+						var optionsvalidation = cmd.Validate();
+
+						if(optionsvalidation.WriteMessages(Console.Error))
+							return 1;
+
+						return cmd.Execute();
+					},
+					(DummyOptions opts) => 255,
+					(parserErrors) =>
+					1
+					);
+
+				Exit(exitcode);
 			}
-			else
+			catch(Exception ex)
 			{
-
-				PackCommand packer = new PackCommand(PackOptions);
-				try
-				{
-					int exitcode = packer.Execute();
-					Exit(exitcode);
-				}
-				catch(Exception ex)
-				{
-					Console.WriteLine(ex);
-					Exit(1);
-				}
-
-				
+				Console.Error.WriteLine(ex.ToString());
+				Exit(255);
 			}
+
 		}
 		static void Exit(int exitcode, int waitSeconds = 10, bool quiet = false)
 		{

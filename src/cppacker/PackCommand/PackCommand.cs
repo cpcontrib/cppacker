@@ -11,11 +11,10 @@ using System.Threading.Tasks;
 
 namespace cppacker.Pack
 {
-	public class PackCommand : CommandLine.ICommand
+	public class PackCommand : CommandLine.ICommand, CommandLine.ICommandOptionsValidator
 	{
-		public CommandLine.OptionsValidation ValidateOptions(CommandLine.ICommandOptions options)
+		public CommandLine.OptionsValidation Validate()
 		{
-			PackOptions PackOptions = (PackOptions)options;
 			var validation = new CommandLine.OptionsValidation();
 
 			if(File.Exists(PackOptions.ProjectFile) == false)
@@ -25,14 +24,21 @@ namespace cppacker.Pack
 
 			return validation;
 		}
+		private bool? _isValid;
+		public bool IsValid()
+		{
+			if(_isValid == null)
+			{
+				var validation = this.Validate();
+				_isValid = validation.IsValid;
+			}
+			return _isValid.GetValueOrDefault();
+		}
 
 		public PackCommand(PackOptions options)
 		{
+			if(options == null) throw new ArgumentNullException("options");
 			this.PackOptions = options;
-		}
-
-		public PackCommand()
-		{
 		}
 
 		private PackOptions PackOptions;

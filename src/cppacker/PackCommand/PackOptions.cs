@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommandLine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,12 +7,24 @@ using System.Threading.Tasks;
 
 namespace cppacker.Pack
 {
+
+	[Verb("pack")]
 	public class PackOptions : ProgramOptions
 	{
+
+		[Value(0)]
 		public string ProjectFile { get; set; }
+
+		[Option("name")]
 		public string ProjectName { get; set; }
+
+		[Option("version")]
 		public string Version { get; set; }
 
+		[Option("outputpath", HelpText="Specifies an outputpath to write files.")]
 		public string OutputPath { get; set; }
+
+		
+
 	}
 }
