@@ -12,24 +12,24 @@ namespace cppacker.Pack
 	public class UsingsConsolidateAndStrip
 	{
 
-		public IEnumerable<UsingDirectiveSyntax> FindUsings(SrcDoc srcdoc)
+		public IEnumerable<UsingDirectiveSyntax> FindUsings(SrcDoc srcDoc)
 		{
 			//FindUsingsWalker w = new FindUsingsWalker();
 			//w.Visit(srcdoc.SyntaxTree.GetRoot());
 			//var usings = w.UsingStatements;
 			//return usings;
 
-			var compilationUnit = srcdoc.SyntaxTree.GetCompilationUnitRoot();
+			var compilationUnit = srcDoc.SyntaxTree.GetCompilationUnitRoot();
 
 			return compilationUnit.Usings;
 		}
 
-		public SyntaxNode RemoveTopLevelUsings(SrcDoc srcdoc)
+		public CompilationUnitSyntax RemoveTopLevelUsings(SrcDoc srcDoc)
 		{
-			//srcdoc.SyntaxTree.GetSe
-			//var rewriter = new RemoveUsingsRewriter();
+			var emptylist = new SyntaxList<UsingDirectiveSyntax>();
+			var newsyntax = srcDoc.SyntaxTree.GetCompilationUnitRoot().WithUsings(emptylist);
 
-			return srcdoc.SyntaxTree.GetRoot();
+			return newsyntax;
 		}
 
 		private class RemoveUsingsRewriter : CSharpSyntaxRewriter

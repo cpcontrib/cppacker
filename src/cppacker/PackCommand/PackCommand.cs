@@ -46,6 +46,11 @@ namespace cppacker.Pack
 
 		public int Execute()
 		{
+			if(PackOptions.Quiet==false)
+			{
+				Console.WriteLine("Reading source files.");
+			}
+
 			var sourceFiles = LoadSrcDocList();
 
 			var targetFiles = GenerateTargetFilesList(sourceFiles);
@@ -85,6 +90,7 @@ namespace cppacker.Pack
 			foreach(var srcdoc in srcdocList)
 			{
 				if(srcdoc.Document.Name == "AssemblyInfo.cs") continue;
+				if(srcdoc.Document.Name.EndsWith("AssemblyAttributes.cs")) continue;
 
 				var packerDirectives = GetPackerDirectives(srcdoc.Document);
 
@@ -143,6 +149,11 @@ namespace cppacker.Pack
 					//add new targetfile to targetfiles list
 					var targetfile = new TargetFile(targetfileDirective.Options);
 					targetfiles.Add(targetFileName, targetfile);
+
+					if(PackOptions.Verbose)
+					{
+						Console.WriteLine($"New target file: {targetfile.Name}");
+					}
 				}
 
 				//add this sourcedoc to targetfile
@@ -155,9 +166,11 @@ namespace cppacker.Pack
 
 		private void ConsolidateAndStripGlobalUsings(IEnumerable<TargetFile> targetFiles)
 		{
+			//var usingsrewriter = new UsingsConsolidateAndStrip();
+			//usingsrewriter.CombineGlobalUsings(targetFiles.SelectMany(_ => _.SourceDocs).ToArray());
+
 			foreach(var targetfile in targetFiles)
 			{
-
 				var globalnamespaces = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
 				foreach(var srcdoc in targetfile.SourceDocs)
@@ -171,9 +184,17 @@ namespace cppacker.Pack
 						Console.WriteLine(String.Join("\n", usingDirectivesList.Select(_ => _.Name.ToString())));
 					}
 
-					var newsyntaxtree = usingswalker.RemoveTopLevelUsings(srcdoc).SyntaxTree;
-					srcdoc.SyntaxTree = newsyntaxtree;
+					foreach(var usingdir in usingDirectivesList.Select(_ => _.Name.ToString()))
+					{
+						if(globalnamespaces.Contains(usingdir) == false)
+							globalnamespaces.Add(usingdir);
+					}
+
+					var newsyntaxtree = usingswalker.RemoveTopLevelUsings(srcdoc);
+					srcdoc.SyntaxTree = newsyntaxtree.SyntaxTree;
 				}
+
+				targetfile.GlobalUsings = globalnamespaces.OrderBy(_=>_).ToList();
 			}
 		}
 
@@ -203,7 +224,7 @@ namespace cppacker.Pack
 					g.Write(targetfile);
 
 					if(PackOptions.Quiet == false)
-						Console.WriteLine($"Wrote {targetfile.Name}");
+						Console.WriteLine($"Wrote {baseName + targetfile.Name}");
 				}
 				catch(Exception ex)
 				{

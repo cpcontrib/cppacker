@@ -39,10 +39,9 @@ namespace cppacker
 			}
 		}
 
-		private string GetOutputFilePath(TargetFile targetfile)
+		public string GetOutputFilePath(TargetFile targetfile)
 		{
 			string filepath = Path.Combine(_outputPath, _baseName + targetfile.Name);
-			Directory.CreateDirectory(_outputPath);
 			return filepath;
 		}
 
@@ -53,15 +52,16 @@ namespace cppacker
 			//write global usings
 			foreach(var usingStatement in targetFile.GlobalUsings)
 			{
-				writer.WriteLine(usingStatement.ToFullString());
+				writer.WriteLine($"using {usingStatement};");
 			}
+			if(targetFile.GlobalUsings.Count > 0) writer.WriteLine();
 
 			//write source docs
 			foreach(var srcdoc in targetFile.SourceDocs)
 			{
 				writer.WriteLine($"//packed:{srcdoc.Document.Name}");
 
-				srcdoc.Document.GetTextAsync().Result.Write(writer);
+				srcdoc.SyntaxTree.GetText().Write(writer);
 
 				writer.WriteLine($"//packed:{srcdoc.Document.Name}");
 			}

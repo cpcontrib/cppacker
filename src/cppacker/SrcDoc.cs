@@ -9,8 +9,8 @@ namespace cppacker
 {
 	public class SrcDoc
 	{
-		internal Document Document;
-		internal IEnumerable<PackerDirectiveNode> PackerDirectives;
-		internal SyntaxTree SyntaxTree;
+		public Document Document;
+		public IEnumerable<PackerDirectiveNode> PackerDirectives;
+		public SyntaxTree SyntaxTree;
 	}
 }

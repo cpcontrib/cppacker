@@ -45,7 +45,7 @@ namespace cppacker.Parsing
 
 					var node = new PackerDirectiveNode() {
 						Name = split[0],
-						Options = (split.Length < 2 ? null : split[1].TrimEnd()),
+						Options = (split.Length < 2 ? "" : split[1].TrimEnd()),
 						LineNumber = lineIndex + 1
 					};
 
