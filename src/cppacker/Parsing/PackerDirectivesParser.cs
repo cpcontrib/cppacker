@@ -55,19 +55,4 @@ namespace cppacker.Parsing
 		}
 	}
 
-	public class FindUsingsWalker : CSharpSyntaxWalker
-	{
-
-		List<UsingStatementSyntax> fileUsingStatements = new List<UsingStatementSyntax>();
-
-		public override void VisitUsingStatement(UsingStatementSyntax node)
-		{
-			fileUsingStatements.Add(node);
-			base.VisitUsingStatement(node);
-		}
-		public override void VisitUsingDirective(UsingDirectiveSyntax node)
-		{
-			base.VisitUsingDirective(node);
-		}
-	}
 }

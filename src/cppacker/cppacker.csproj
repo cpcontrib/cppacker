@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="PackCommand\CommandLine.types.cs" />
     <Compile Include="PackCommand\PackCommand.cs" />
+    <Compile Include="PackCommand\UsingsConsolidateAndStrip.cs" />
     <Compile Include="SrcDoc.cs" />
     <Compile Include="PackerDirectiveNode.cs" />
     <Compile Include="PackCommand\PackOptions.cs" />

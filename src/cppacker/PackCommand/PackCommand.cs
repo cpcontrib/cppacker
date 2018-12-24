@@ -50,7 +50,7 @@ namespace cppacker.Pack
 
 			var targetFiles = GenerateTargetFilesList(sourceFiles);
 
-			ConsolidateGlobalUsings(sourceFiles, targetFiles);
+			ConsolidateAndStripGlobalUsings(targetFiles);
 
 			GeneratePackedLibraryFiles(targetFiles);
 
@@ -153,12 +153,31 @@ namespace cppacker.Pack
 			return targetfiles.Values;
 		}
 
-		private void ConsolidateGlobalUsings(IEnumerable<SrcDoc> sourceFiles, IEnumerable<TargetFile> targetFiles)
+		private void ConsolidateAndStripGlobalUsings(IEnumerable<TargetFile> targetFiles)
 		{
+			foreach(var targetfile in targetFiles)
+			{
 
+				var globalnamespaces = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+				foreach(var srcdoc in targetfile.SourceDocs)
+				{
+					var usingswalker = new UsingsConsolidateAndStrip();
+					var usingDirectivesList = usingswalker.FindUsings(srcdoc);
+					
+					if(PackOptions.Verbose)
+					{
+						Console.WriteLine("\nUsings in {0}:", srcdoc.Document.Name);
+						Console.WriteLine(String.Join("\n", usingDirectivesList.Select(_ => _.Name.ToString())));
+					}
+
+					var newsyntaxtree = usingswalker.RemoveTopLevelUsings(srcdoc).SyntaxTree;
+					srcdoc.SyntaxTree = newsyntaxtree;
+				}
+			}
 		}
 
-
+	
 		public void GeneratePackedLibraryFiles(IEnumerable<TargetFile> targetfilesList)
 		{
 			string projectname = PackOptions_GetProjectName();
