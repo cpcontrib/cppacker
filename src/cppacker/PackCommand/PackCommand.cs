@@ -46,12 +46,9 @@ namespace cppacker.Pack
 
 		public int Execute()
 		{
-			if(PackOptions.Quiet==false)
-			{
-				Console.WriteLine("Reading source files.");
-			}
+			var sourceFiles = LoadProjectDocuments();
 
-			var sourceFiles = LoadSrcDocList();
+			ReadProjectDocuments(sourceFiles);
 
 			var targetFiles = GenerateTargetFilesList(sourceFiles);
 
@@ -62,8 +59,13 @@ namespace cppacker.Pack
 			return 0;
 		}
 
-		IEnumerable<SrcDoc> LoadProject()
+		IEnumerable<SrcDoc> LoadProjectDocuments()
 		{
+			if(PackOptions.Quiet == false)
+			{
+				Console.WriteLine($"Reading project file {PackOptions.ProjectFile}");
+			}
+
 			var projectfilepath = PackOptions.ProjectFile;
 			//normalize path?
 
@@ -72,26 +74,44 @@ namespace cppacker.Pack
 			var workspace = MSBuildWorkspace.Create();
 			var project = workspace.OpenProjectAsync(projectfilepath).Result;
 
-			var documents = project.Documents.Where(_ => _.SupportsSyntaxTree == true).Select(item =>
-				new SrcDoc() {
-					Document = item
-				}
-			);
+			var documents = project.Documents.Where(_ => _.SupportsSyntaxTree == true);
 
-			return documents;
+			List<SrcDoc> srcdocs = new List<SrcDoc>();
+			foreach(var document in documents)
+			{
+				bool skip = false;
+				if(document.Name == "AssemblyInfo.cs") skip = true;
+				else if(document.Name.EndsWith("AssemblyAttributes.cs")) skip = true;
+
+				if(skip==true)
+				{
+					if(PackOptions.Verbose && PackOptions.Quiet==false)
+						Console.WriteLine($"skip {document.Name}");
+					continue;
+				}
+
+				if(PackOptions.Verbose)
+				{
+					Console.WriteLine(document.Name);
+				}
+
+				srcdocs.Add(new SrcDoc() {
+					Document = document
+				});
+			}
+
+			return srcdocs;
 		}
 
-		IEnumerable<SrcDoc> LoadSrcDocList()
+		void ReadProjectDocuments(IEnumerable<SrcDoc> srcdocList)
 		{
-			var srcdocList = LoadProject();
+			if(PackOptions.Verbose)
+				Console.WriteLine("ReadProjectDocuments:");
 
 			List<SrcDoc> docs = new List<SrcDoc>(srcdocList.Count());
 
 			foreach(var srcdoc in srcdocList)
 			{
-				if(srcdoc.Document.Name == "AssemblyInfo.cs") continue;
-				if(srcdoc.Document.Name.EndsWith("AssemblyAttributes.cs")) continue;
-
 				var packerDirectives = GetPackerDirectives(srcdoc.Document);
 
 				if(packerDirectives.Count() > 0 && packerDirectives.Any(_ => _.Name == "exclude") == true)
@@ -108,7 +128,7 @@ namespace cppacker.Pack
 				}
 			}
 
-			return docs;
+			//return docs;
 		}
 
 		public IEnumerable<PackerDirectiveNode> GetPackerDirectives(Document document)
