@@ -25,7 +25,7 @@ namespace cppacker
 			{
 				string filepath = GetOutputFilePath(targetfile);
 
-				using(FileStream fs = new FileStream(filepath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite))
+				using(FileStream fs = new FileStream(filepath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
 				{
 					using(StreamWriter sw = new StreamWriter(fs))
 					{
