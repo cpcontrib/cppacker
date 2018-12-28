@@ -9,7 +9,7 @@ using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using cppacker.Pack;
+using cppacker.Packing;
 using cppacker;
 
 namespace cppacker_Tests
@@ -48,25 +48,28 @@ namespace cppacker_Tests
 			updatedRoot.Usings.Count.Should().Be(0);
 		}
 
-		[Test]
-		public void CombinedUsings()
-		{
-			//arrange
-			string[] expected_globalUsings = new string[] { "System", "System.Collections", "System.Linq", "System.Text" };
+		//[Test]
+		//public void CombinedUsings()
+		//{
+		//	//arrange
+		//	string[] expected_globalUsings = new string[] { "System", "System.Collections", "System.Linq", "System.Text" };
 
-			var srcDoc1 = new SrcDoc() { SyntaxTree = CSharpSyntaxTree.ParseText(helloworld1_cs) };
-			var srcDoc2 = new SrcDoc() { SyntaxTree = CSharpSyntaxTree.ParseText(helloworld2_cs) };
+		//	var srcDoc1 = new SrcDoc() { SyntaxTree = CSharpSyntaxTree.ParseText(helloworld1_cs) };
+		//	var srcDoc2 = new SrcDoc() { SyntaxTree = CSharpSyntaxTree.ParseText(helloworld2_cs) };
 
-			//act
-			UsingsConsolidateAndStrip usingsrewriter = new UsingsConsolidateAndStrip();
-			var globalUsings = usingsrewriter.CombineGlobalUsings(srcDoc1, srcdoc2);
+		//	//act
+		//	UsingsConsolidateAndStrip usingsrewriter = new UsingsConsolidateAndStrip();
+		//	var globalUsings = usingsrewriter.RemoveTopLevelUsings(srcDoc1);
 
-			//assert
-			globalUsings.Should().BeEquivalentTo(expected_globalUsings);
-		}
+		//	//assert
+		//	var actual = globalUsings.Usings.Select(_ => _.Name.ToString());
+
+		//	actual.Should().BeEquivalentTo(expected_globalUsings);
+		//}
 
 
-		string helloworld1_cs = @"using System;
+		string helloworld1_cs = @"
+using System;
 using System.Collections;
 using System.Text;
  
@@ -80,7 +83,8 @@ namespace HelloWorld
         }
     }
 }";
-		string helloworld2_cs = @"using System;
+		string helloworld2_cs = @"
+using System;
 using System.Linq;
 using System.Text;
  

@@ -37,6 +37,7 @@
     <Compile Include="PackCommand_Tests.cs" />
     <Compile Include="PackerDirectiveParser_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TargetFileWriter_Tests.cs" />
     <Compile Include="UsingsRewriter_Tests.cs" />
   </ItemGroup>
   <ItemGroup>

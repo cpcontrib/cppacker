@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 using CommandLine;
 
@@ -13,8 +14,9 @@ namespace cppacker
 	/// <summary>
 	/// Created because of ParseArguments bug that doesnt deal with a single verb
 	/// </summary>
-	[Verb("dummy", Hidden = true)] public class DummyOptions { } 
+	[Verb("dummy", Hidden = true)] public class DummyOptions { }
 
+	[ExcludeFromCodeCoverage]
 	class Program
 	{
 		static void Main(string[] args)

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 
 namespace CommandLine
 {
+
 	public interface ICommand
 	{
 		int Execute();
@@ -28,6 +30,7 @@ namespace CommandLine
 		OptionsValidation Validate(Toptions options);
 	}
 
+	[ExcludeFromCodeCoverage]
 	public class OptionsValidation
 	{
 		List<Tuple<bool,string>> messages = new List<Tuple<bool, string>>();

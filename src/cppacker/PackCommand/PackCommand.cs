@@ -107,7 +107,7 @@ namespace cppacker.Packing
 			//return docs;
 		}
 
-		public IEnumerable<PackerDirectiveNode> GetPackerDirectives(Document document)
+		internal IEnumerable<PackerDirectiveNode> GetPackerDirectives(Document document)
 		{
 			StringWriter sw = new StringWriter();
 			document.GetTextAsync().Result.Write(sw);
@@ -117,7 +117,7 @@ namespace cppacker.Packing
 			return p.ParseLines(stringlines);
 		}
 
-		IEnumerable<TargetFile> GenerateTargetFilesList(IEnumerable<SrcDoc> sourceFiles)
+		internal IEnumerable<TargetFile> GenerateTargetFilesList(IEnumerable<SrcDoc> sourceFiles)
 		{
 			Dictionary<string,TargetFile> targetfiles = new Dictionary<string,TargetFile>(StringComparer.OrdinalIgnoreCase);
 
@@ -125,7 +125,7 @@ namespace cppacker.Packing
 			{
 				PackerDirectiveNode targetfileDirective = null;
 
-				try { targetfileDirective = srcdoc.PackerDirectives.SingleOrDefault(_ => _.Name == "targetFile"); }
+				try { targetfileDirective = srcdoc.PackerDirectives?.SingleOrDefault(_ => _.Name == "targetFile"); }
 				catch(InvalidOperationException ex)
 				{
 					throw new ApplicationException(
@@ -161,7 +161,7 @@ namespace cppacker.Packing
 			return targetfiles.Values;
 		}
 
-		private void ConsolidateAndStripGlobalUsings(IEnumerable<TargetFile> targetFiles)
+		internal void ConsolidateAndStripGlobalUsings(IEnumerable<TargetFile> targetFiles)
 		{
 			//var usingsrewriter = new UsingsConsolidateAndStrip();
 			//usingsrewriter.CombineGlobalUsings(targetFiles.SelectMany(_ => _.SourceDocs).ToArray());
