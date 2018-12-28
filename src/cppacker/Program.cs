@@ -29,17 +29,15 @@ namespace cppacker
 					.ParseArguments<PackOptions, DummyOptions>(args)
 					.MapResult(
 					(PackOptions opts) => {
+						var val = new PackOptionsValidator(null).Validate(opts).WriteWhenNotValid(Console.Error);
+						if(val.IsValid == false) return val.NonZeroExit();
+
 						var cmd = new PackCommand(opts);
-						var optionsvalidation = cmd.Validate();
-
-						if(optionsvalidation.WriteMessages(Console.Error))
-							return 1;
-
 						return cmd.Execute();
 					},
 					(DummyOptions opts) => 255,
 					(parserErrors) =>
-					1
+					255
 					);
 
 				Exit(exitcode);

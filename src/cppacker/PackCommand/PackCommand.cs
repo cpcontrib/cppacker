@@ -8,29 +8,8 @@ using System.Linq;
 
 namespace cppacker.Packing
 {
-	public class PackCommand : CommandLine.ICommand, CommandLine.ICommandOptionsValidator
+	public class PackCommand : CommandLine.ICommand
 	{
-		public CommandLine.OptionsValidation Validate()
-		{
-			var validation = new CommandLine.OptionsValidation();
-
-			if(File.Exists(PackOptions.ProjectFile) == false)
-			{
-				validation.AddMessage("ProjectFile", $"The file specified '{PackOptions.ProjectFile}' was not found.");
-			}
-
-			return validation;
-		}
-		private bool? _isValid;
-		public bool IsValid()
-		{
-			if(_isValid == null)
-			{
-				var validation = this.Validate();
-				_isValid = validation.IsValid;
-			}
-			return _isValid.GetValueOrDefault();
-		}
 
 		public PackCommand(PackOptions options)
 		{
