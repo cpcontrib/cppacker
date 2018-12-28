@@ -24,6 +24,8 @@ namespace cppacker.Pack
 		[Option("outputpath", HelpText="Specifies an outputpath to write files.")]
 		public string OutputPath { get; set; }
 
+		[Option("targetfile", HelpText="Default targetfile value when not specified in particular files. Default is lib.cs")]
+		public string TargetFile { get; set; }
 		
 
 	}

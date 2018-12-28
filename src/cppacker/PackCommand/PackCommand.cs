@@ -157,18 +157,19 @@ namespace cppacker.Pack
 						ex);
 				}
 
-				string targetFileName = "lib.cs";
-
-				if(targetfileDirective != null)
+				if(targetfileDirective == null)
 				{
-					targetFileName = targetfileDirective.Options;
+					targetfileDirective = new PackerDirectiveNode {
+						Name = "targetFile",
+						Options = PackOptions.TargetFile ?? "lib.cs"
+					};
 				}
 
-				if(targetfiles.ContainsKey(targetFileName) == false)
+				if(targetfiles.ContainsKey(targetfileDirective.Options) == false)
 				{
 					//add new targetfile to targetfiles list
 					var targetfile = new TargetFile(targetfileDirective.Options);
-					targetfiles.Add(targetFileName, targetfile);
+					targetfiles.Add(targetfileDirective.Options, targetfile);
 
 					if(PackOptions.Verbose)
 					{
@@ -177,7 +178,7 @@ namespace cppacker.Pack
 				}
 
 				//add this sourcedoc to targetfile
-				targetfiles[targetFileName].SourceDocs.Add(srcdoc);
+				targetfiles[targetfileDirective.Options].SourceDocs.Add(srcdoc);
 
 			}
 
