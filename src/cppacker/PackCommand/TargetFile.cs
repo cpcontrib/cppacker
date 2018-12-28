@@ -1,11 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace cppacker
+namespace cppacker.Packing
 {
 	public class TargetFile
 	{
@@ -13,7 +9,7 @@ namespace cppacker
 		{
 			this.Name = name;
 			this.SourceDocs = new List<SrcDoc>();
-			this.GlobalUsings = new List<String>();
+			this.GlobalUsings = new List<string>();
 		}
 
 		public List<SrcDoc> SourceDocs { get; private set; }

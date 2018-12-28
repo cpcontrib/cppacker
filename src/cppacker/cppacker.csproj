@@ -50,15 +50,15 @@
     <Compile Include="PackCommand\PackCommand.cs" />
     <Compile Include="PackCommand\PackOptionsValidator.cs" />
     <Compile Include="PackCommand\UsingsConsolidateAndStrip.cs" />
-    <Compile Include="SrcDoc.cs" />
-    <Compile Include="PackerDirectiveNode.cs" />
+    <Compile Include="PackCommand\SrcDoc.cs" />
+    <Compile Include="PackCommand\PackerDirectiveNode.cs" />
     <Compile Include="PackCommand\PackOptions.cs" />
     <Compile Include="Parsing\PackerDirectivesParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="PackCommand\ProgramOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TargetFile.cs" />
-    <Compile Include="TargetFileWriter.cs" />
+    <Compile Include="PackCommand\TargetFile.cs" />
+    <Compile Include="PackCommand\TargetFileWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
