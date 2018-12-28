@@ -7,12 +7,12 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-using PackOptions = cppacker.Pack.PackOptions;
-using PackCommand = cppacker.Pack.PackCommand;
 using CommandLine;
 
 namespace cppacker
 {
+	using cppacker.Packing;
+
 	/// <summary>
 	/// Created because of ParseArguments bug that doesnt deal with a single verb
 	/// </summary>

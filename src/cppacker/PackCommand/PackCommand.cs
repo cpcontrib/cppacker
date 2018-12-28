@@ -5,11 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace cppacker.Pack
+namespace cppacker.Packing
 {
 	public class PackCommand : CommandLine.ICommand, CommandLine.ICommandOptionsValidator
 	{
