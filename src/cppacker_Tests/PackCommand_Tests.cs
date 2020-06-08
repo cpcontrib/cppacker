@@ -37,7 +37,7 @@ namespace cppacker_Tests
 		}
 
 		[Test]
-		public void Check_ConsolidatedUsings()
+		public void Check_GeneratePackedLibraryFiles()
 		{
 			//arrange
 			string[] expected_ConsolidatedUsings = new string[] { "System", "System.Collections", "System.Linq", "System.Text" };

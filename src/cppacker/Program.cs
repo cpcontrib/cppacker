@@ -48,6 +48,8 @@ namespace cppacker
 			}
 
 		}
+
+
 		static void Exit(int exitcode, int waitSeconds = 10, bool quiet = false)
 		{
 			if(System.Diagnostics.Debugger.IsAttached)

@@ -33,19 +33,19 @@ namespace CommandLine
 	[ExcludeFromCodeCoverage]
 	public class OptionsValidation
 	{
-		List<Tuple<bool,string>> messages = new List<Tuple<bool, string>>();
+		List<Tuple<bool, string>> messages = new List<Tuple<bool, string>>();
 
 		public bool IsValid { get { return this._IsValid; } }
 		private bool _IsValid = true;
 
 		public IEnumerable<string> GetMessages()
 		{
-			return messages.Where(_=>_.Item1 == true).Select(_=>_.Item2);
+			return messages.Where(_ => _.Item1 == true).Select(_ => _.Item2);
 		}
 
 		public OptionsValidation AddMessage(string optionName, string message, bool isValid = true)
 		{
-			this.messages.Add(new Tuple<bool,string>(isValid, optionName + ": " + message));
+			this.messages.Add(new Tuple<bool, string>(isValid, optionName + ": " + message));
 			if(isValid == false) this._IsValid = false;
 			return this;
 		}
